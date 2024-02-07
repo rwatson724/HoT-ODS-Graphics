@@ -20,7 +20,7 @@ proc format;
       81 = 'Xanomeline High Dose'
           ;
 
-   picture pctfmt (round) 0-high='000%';
+   picture pctfmt (round) 0-high = '000%';
 run;
 
 /************************************************************************************/
