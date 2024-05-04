@@ -42,7 +42,9 @@
 %path
 
 libname outd "&root.Data";
-%let outp = &root.Output\;
+%let outp = &root.Output/;
+
+ods path work.TEMPLAT (update) SASUSER.TEMPLAT (read) SASHELP.TMPLMST (read);
 
 /* need to  make sure the ods listing destination is on so that the results from the SAS proc */
 /* will go to the listing destination for future reference                                    */

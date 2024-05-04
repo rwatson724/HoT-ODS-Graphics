@@ -7,7 +7,7 @@
 ****************************************************************************************/
 
 /**** CHANGE PATH TO WHERE SETUP.SAS IS LOCATED ****/
-%inc "C:\Users\gonza\OneDrive - datarichconsulting.com\Desktop\GitHub\HoT-ODS-Graphics\Dev\Example\setup.sas";
+%inc "C:\Users\gonza\OneDrive - datarichconsulting.com\Desktop\GitHub\HoT-ODS-Graphics\Exercises\setup.sas";
 
 /**********************************************************************************************************/
 /*** BEGIN SECTION TO PRODUCE BASIC BAR CHART USING SGPLOT AND GTL WITH TITLE/FOOTNOTE OUTSIDE OF GRAPH ***/
