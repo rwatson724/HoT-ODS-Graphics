@@ -7,7 +7,7 @@
 ****************************************************************************************/
 
 /**** CHANGE PATH TO WHERE SETUP.SAS IS LOCATED ****/
-%inc "C:\Users\gonza\OneDrive - datarichconsulting.com\Desktop\GitHub\HoT-ODS-Graphics\Exercises\setup.sas";
+%inc "C:\Users\gonza\OneDrive - datarichconsulting.com\Desktop\GitHub\HoT-ODS-Graphics\Solutions\setup.sas";
 
 /*********************************************************************************************************************/
 /*** BEGIN SECTION TO PRODUCE BASIC BAR CHART USING SGPLOT AND GTL WITH TITLE/FOOTNOTE INSIDE AND OUTSIDE OF GRAPH ***/
@@ -51,7 +51,7 @@ proc template;
                barchart x = TRTAN y = PCT_ROW / orient = vertical
                                                 barlabel = true;
 
-            /* portion to embed table – to be placed at the top            */
+            /* portion to embed table ï¿½ to be placed at the top            */
    	      /* order = rowmajor indicates that the grid will be filled out */
    	      /* in row order so each column in the row will be populated    */
    	      /* prior to moving onto the next row                           */

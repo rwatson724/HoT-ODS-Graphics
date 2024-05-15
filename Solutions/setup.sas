@@ -4,6 +4,7 @@
 *** Purpose:    Initialize the setup of libnames, output paths, macro variables and formats
 *** Programmer: Richann Jean Watson
 *** Date:       02MAY2024
+*** Acknowledgment: Thanks to Bartosz Jablonski for the suggestions for improvement for determining mode.
 ****************************************************************************************/
 %macro path;
    /* identify the location where the program that is currently being executed is saved */
@@ -11,16 +12,16 @@
       length pgmpath $9000 pgmname fldtype $200 root $400;
       /* based on the platform SAS is executed determines which system macro variables are used */
 
+      mode = upcase(symget("sysprocessmode"));
       /* interactive SAS */
-      %if "%upcase(&sysprocessmode)" = "SAS DMS SESSION" %then pgmpath = "%sysget(SAS_EXECFILEPATH)";
+      if  mode = "SAS DMS SESSION" then pgmpath = sysget("SAS_EXECFILEPATH");
       /* SAS EG */
-      %else %if "%upcase(&sysprocessmode)" = "SAS WORKSPACE SERVER" %then pgmpath = "&_SASPROGRAMFILE";
+      else if  mode = "SAS WORKSPACE SERVER" then pgmpath = symget('_SASPROGRAMFILE');
       /* batch */
-      %else %if "%upcase(&sysprocessmode)" = "SAS BATCH MODE" %then pgmpath = "%sysfunc(getoption(sysin))";
-      ;  /* this semicolon is needed to end the assignment statement (i.e., pgmpath = "...";) semicolons in above statements end the %if statements */
+      else if  mode = "SAS BATCH MODE" then pgmpath = getoption('sysin');
 
       /* remove the quotes from around the program path name */
-      pgmpath = trim(left(tranwrd(tranwrd(pgmpath, "'", ""), '"', '')));
+      pgmpath = strip(dequote(pgmpath));
 
       /* retrieve the program name without the '.sas' extension, deliverable name, production/validation, task (e.g., SDTM, ADaM, IAD, Tables, etc.) */
       pgmname = strip(scan(pgmpath, -2, '\/.'));
@@ -31,11 +32,11 @@
       root = substr(pgmpath, 1, find(pgmpath, fldtype, 't') - 1);
 
       /* create global macro variables to be used for defining libnames */
-      call symputx('pgmname', trim(left(pgmname)), 'G'); 
-      call symputx('fldtype', trim(left(fldtype)), 'G'); 
-      call symputx('root', trim(left(root)), 'G'); 
-      call symputx('pgmroot', strip(pgmroot), 'G');
-      call symputx('pgmpath', trim(left(pgmpath)), 'G');
+      call symputx('pgmname', pgmname, 'G');
+      call symputx('fldtype', fldtype, 'G');
+      call symputx('root',    root,    'G');
+      call symputx('pgmroot', pgmroot, 'G');
+      call symputx('pgmpath', pgmpath, 'G');
    run;
 %mend path;
 

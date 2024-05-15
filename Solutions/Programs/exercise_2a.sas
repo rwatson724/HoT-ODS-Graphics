@@ -7,7 +7,7 @@
 ****************************************************************************************/
 
 /**** CHANGE PATH TO WHERE SETUP.SAS IS LOCATED ****/
-%inc "C:\Users\gonza\OneDrive - datarichconsulting.com\Desktop\GitHub\HoT-ODS-Graphics\Exercises\setup.sas";
+%inc "C:\Users\gonza\OneDrive - datarichconsulting.com\Desktop\GitHub\HoT-ODS-Graphics\Solutions\setup.sas";
 
 /*********************************************************************************************************************/
 /*** BEGIN SECTION TO PRODUCE BASIC BAR CHART USING SGPLOT AND GTL WITH TITLE/FOOTNOTE INSIDE AND OUTSIDE OF GRAPH ***/
@@ -21,10 +21,10 @@ data insidetf;
    retain function 'text' drawspace 'graphpercent' width 100;
    length anchor $6 textstyleelement $17 label $51;
    input x1 y1 anchor $ textstyleelement $ label $ 32 - 82;
-   cards;
-50 99 top    GraphTitleText    Patients with Dermatologic Events                  
+   cards4;
+50 99 top    GraphTitleText    Patients with Dermatologic Events                  ;
 20  1 bottom GraphFootnoteText Subjects only counted once in each treatment group.
-;
+;;;;
 run;
 
 ods graphics / imagename = "&pgmname" height = 6in width = 9in outputfmt = png noborder;
