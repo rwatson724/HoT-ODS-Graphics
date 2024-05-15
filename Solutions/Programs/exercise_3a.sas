@@ -1,7 +1,7 @@
 /****************************************************************************************
-*** Program:    exercise2a.sas
+*** Program:    exercise3a.sas
 *** Output:     N/A
-*** Purpose:    Produce Bar Chart with Titles/Footnotes Inside/Outside Graph Area with SGPLOT
+*** Purpose:    Produce Bar Chart with Table Using INSET with SGPLOT
 *** Programmer: Richann Jean Watson
 *** Date:       02MAY2024
 ****************************************************************************************/
@@ -23,7 +23,7 @@ data insidetf;
    input x1 y1 anchor $ textstyleelement $ label $ 32 - 82;
    cards;
 50 99 top    GraphTitleText    Patients with Dermatologic Events                  
-20  1 bottom GraphFootnoteText Subjects only counted once in each treatment group.
+20  1  bottom GraphFootnoteText Subjects only counted once in each treatment group.
 ;
 run;
 
@@ -32,18 +32,19 @@ goptions device = png;
 ods pdf notoc dpi = 300 file = "&outp.&pgmname..pdf" nogtitle nogfootnote;
 ods rtf image_dpi = 300 file = "&outp.&pgmname..rtf" nogtitle nogfootnote;
 title "Bar Chart by Treatment for Percent of Patients with Dermatologic Event - &pgmname";
-footnote "SGPLOT - Titles/Footnotes Inside and Outide Graph Area";
+footnote "SGPLOT - Inset Table Component Using INSET";
 
-/***** ENTER OPTIONS TO USE THE ANNOTATE DATA SET TO CREATE THE GRAPH TITLE/FOOTNOTE *****/
-/****  PLACE GRAPH TITLE AT TOP AND PADDING AT THE TOP TO ADEQUATELY SPACE THE TITLE *****/
-/****  PLACE GRAPH FOOTNOTE AT BOTTOM AND PADDING TO ADEQUATELY SPACE THE FOOTNOTE   *****/
-proc sgplot data = OUTD.TRTPCT                          ;
+proc sgplot data = OUTD.TRTPCT pad = (top = 5% bottom = 5%) sganno = insidetf;
    format TRTAN trt. PCT_ROW pctfmt.; 
    xaxis type = discrete label = " ";
    yaxis type = linear label = "Percentage of Patients with Dermatologic Event (%)"
          values = (0 to 100 by 25);
    vbar TRTAN / response = PCT_ROW
                 datalabel = PCT_ROW;
+   inset "Pearson's Chi-square Test Results                                   Cochran-Armitage Trend Test Results"     
+         "    Treatment Comparison                    Value   P-Value                  Value = &cmstat"
+         "      Placebo - Low Dose                     &valuechi054   &pchi054                    P-value = &cmpvalue"
+         "      Placebo - High Dose                    &valuechi081   &pchi081"/ textattrs = (size = 8pt) position = top;
 run;
 ods rtf close;
 ods pdf close;

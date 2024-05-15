@@ -1,7 +1,7 @@
 /****************************************************************************************
-*** Program:    exercise2b.sas
+*** Program:    exercise3b.sas
 *** Output:     N/A
-*** Purpose:    Produce Bar Chart with Titles/Footnotes Inside/Outside Graph Area with GTL
+*** Purpose:    Produce Bar Chart with Table Using DRAWTEXT with GTL
 *** Programmer: Richann Jean Watson
 *** Date:       02MAY2024
 ****************************************************************************************/
@@ -22,13 +22,14 @@ goptions device = png;
 ods pdf notoc dpi = 300 file = "&outp.&pgmname..pdf" nogtitle nogfootnote;
 ods rtf image_dpi = 300 file = "&outp.&pgmname..rtf" nogtitle nogfootnote;
 title "Bar Chart by Treatment for Percent of Patients with Dermatologic Event - &pgmname";
-footnote "GTL - Titles/Footnotes Inside and Outide Graph Area";
+footnote "GTL - Inset Table Component Using DRAWTEXT";
 
 proc template;
    define statgraph recrgrphb;
       begingraph / border = false;
 
-         /***** ENTER THE GRAPH TITLE AND FOOTNOTE *****/
+         entrytitle "Patients with Dermatologic Events";
+         entryfootnote halign = left "Subjects only counted once in each treatment group.";
 
 	      /* need to force the y-axis to display up through 100 in order for the table to be displayed */
          layout overlay / xaxisopts = (label = " "
@@ -39,8 +40,20 @@ proc template;
 
 		   	/* create the vertical bar charts for each treatment group */
             barchart x = TRTAN y = PCT_ROW / orient = vertical
-                                             barlabel = true;
+                                             barlabel = true;                                             
 
+            /* drawtext statements */
+            drawtext textattrs = (size = 8pt) "Pearson's Chi-square Test Results                                   Cochran-Armitage Trend Test Results"  
+                       / x = 20 y = 99 width = 75 widthunit = percent xspace = wallpercent yspace = datavalue anchor = left;
+                                                             
+            drawtext textattrs = (size = 8pt) "    Treatment Comparison                    Value   P-Value                  Value = &cmstat"
+                       / x = 20 y = 96 width = 75 widthunit = percent xspace = wallpercent yspace = datavalue anchor = left;
+                                              
+            drawtext textattrs = (size = 8pt) "      Placebo - Low Dose                     &valuechi054   &pchi054                    P-value = &cmpvalue" 
+                       / x = 20 y = 93 width = 75 widthunit = percent xspace = wallpercent yspace = datavalue anchor = left;
+                                              
+            drawtext textattrs = (size = 8pt) "      Placebo - High Dose                    &valuechi081   &pchi081"
+                       / x = 20 y = 90 width = 75 widthunit = percent xspace = wallpercent yspace = datavalue anchor = left;
          endlayout;
       endgraph;
    end;

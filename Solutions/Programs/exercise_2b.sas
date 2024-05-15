@@ -1,7 +1,7 @@
 /****************************************************************************************
-*** Program:    exercise1b.sas
+*** Program:    exercise2b.sas
 *** Output:     N/A
-*** Purpose:    Produce Basic Bar Chart with GTL
+*** Purpose:    Produce Bar Chart with Titles/Footnotes Inside/Outside Graph Area with GTL
 *** Programmer: Richann Jean Watson
 *** Date:       02MAY2024
 ****************************************************************************************/
@@ -9,9 +9,9 @@
 /**** CHANGE PATH TO WHERE SETUP.SAS IS LOCATED ****/
 %inc "C:\Users\gonza\OneDrive - datarichconsulting.com\Desktop\GitHub\HoT-ODS-Graphics\Exercises\setup.sas";
 
-/**********************************************************************************************************/
-/*** BEGIN SECTION TO PRODUCE BASIC BAR CHART USING SGPLOT AND GTL WITH TITLE/FOOTNOTE OUTSIDE OF GRAPH ***/
-/**********************************************************************************************************/
+/*********************************************************************************************************************/
+/*** BEGIN SECTION TO PRODUCE BASIC BAR CHART USING SGPLOT AND GTL WITH TITLE/FOOTNOTE INSIDE AND OUTSIDE OF GRAPH ***/
+/*********************************************************************************************************************/
 /* close the listing destination */
 ods listing close;
 ods escapechar='^';
@@ -22,11 +22,15 @@ goptions device = png;
 ods pdf notoc dpi = 300 file = "&outp.&pgmname..pdf" nogtitle nogfootnote;
 ods rtf image_dpi = 300 file = "&outp.&pgmname..rtf" nogtitle nogfootnote;
 title "Bar Chart by Treatment for Percent of Patients with Dermatologic Event - &pgmname";
-footnote "GTL - Bar Chart Component Only";
+footnote "GTL - Titles/Footnotes Inside and Outide Graph Area";
 
 proc template;
    define statgraph recrgrphb;
       begingraph / border = false;
+
+         /*** MAKE THIS PART OF THE EXERCISE -- I.E., ADD TITLE/FOOTNOTE INSIDE OF GRAPH ***/
+         entrytitle "Patients with Dermatologic Events";
+         entryfootnote halign = left "Subjects only counted once in each treatment group.";
 
 	      /* need to force the y-axis to display up through 100 in order for the table to be displayed */
          layout overlay / xaxisopts = (label = " "
@@ -34,16 +38,17 @@ proc template;
                           yaxisopts = (label = "Percentage of Patients with Dermatologic Event (%)"
                                        linearopts = (tickvaluesequence = (start = 0 end = 100 increment = 25)
                                                                           viewmax = 100));
-   
-            /***** ENTER PLOT STATEMENMT TO PRODUCE A VERTICAL BAR CHART *****/
+
+		   	/* create the vertical bar charts for each treatment group */
+            barchart x = TRTAN y = PCT_ROW / orient = vertical
+                                             barlabel = true;
 
          endlayout;
       endgraph;
    end;
 run;
 
-/***** ENTER DATA SET NAME AND TEMPLATE NAME TO RENDER THE GRAPH *****/
-proc sgrender data =         template =       ;
+proc sgrender data = OUTD.TRTPCT template = recrgrphb;
   format TRTAN trt. PCT_ROW pctfmt.; 
 run;
 

@@ -29,9 +29,8 @@ proc sgplot data = OUTD.TRTPCT;
    xaxis type = discrete label = " ";
    yaxis type = linear label = "Percentage of Patients with Dermatologic Event (%)"
          values = (0 to 100 by 25);
-   
-   /***** ENTER PLOT STATEMENMT TO PRODUCE A VERTICAL BAR CHART *****/
-
+   vbar TRTAN / response = PCT_ROW
+                datalabel = PCT_ROW;
 run;
 ods rtf close;
 ods pdf close;

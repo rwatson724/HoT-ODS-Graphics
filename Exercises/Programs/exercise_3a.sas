@@ -41,10 +41,12 @@ proc sgplot data = OUTD.TRTPCT pad = (top = 5% bottom = 5%) sganno = insidetf;
          values = (0 to 100 by 25);
    vbar TRTAN / response = PCT_ROW
                 datalabel = PCT_ROW;
-   inset "Pearson's Chi-square Test Results                                   Cochran-Armitage Trend Test Results"     
-         "    Treatment Comparison                    Value   P-Value                  Value = &cmstat"
-         "      Placebo - Low Dose                     &valuechi054   &pchi054                    P-value = &cmpvalue"
-         "      Placebo - High Dose                    &valuechi081   &pchi081"/ textattrs = (size = 8pt) position = top;
+
+   /***** ADJUST THE SPACING SO THAT THE TABLE IS BETTER ALIGNED *****/
+   inset "Pearson's Chi-square Test Results Cochran-Armitage Trend Test Results"     
+         "Treatment Comparison Value          P-Value    Value = &cmstat"
+         "Placebo - Low Dose   &valuechi054   &pchi054   P-value = &cmpvalue"
+         "Placebo - High Dose  &valuechi081   &pchi081"/ textattrs = (size = 8pt) position = top;
 run;
 ods rtf close;
 ods pdf close;
